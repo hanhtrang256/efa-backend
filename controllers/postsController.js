@@ -1,17 +1,21 @@
+const db = require('../db/database');
+
 let posts = [];
 let nextId = 1;
 
-const getAllPosts = (req, res) => {
+const getAllPosts = async (req, res) => {
   try {
+    const allPosts = await db.any('SELECT * FROM public."Posts"');
     res.status(200).json({
       success: true,
-      count: posts.length,
-      data: posts
+      count: allPosts.length,
+      data: allPosts
     });
   } catch (error) {
+    // res.json({ error: error.message });
     res.status(500).json({
       success: false,
-      message: 'Server error',
+      message: 'Internal Server Error',
       error: error.message
     });
   }
@@ -43,39 +47,39 @@ const getPostById = (req, res) => {
 };
 
 const createPost = (req, res) => {
-  try {
-    const { title, content, category } = req.body;
+  // try {
+  //   const { title, content, category } = req.body;
 
-    if (!title || !content) {
-      return res.status(400).json({
-        success: false,
-        message: 'Title and content are required'
-      });
-    }
+  //   if (!title || !content) {
+  //     return res.status(400).json({
+  //       success: false,
+  //       message: 'Title and content are required'
+  //     });
+  //   }
 
-    const newPost = {
-      id: nextId++,
-      title,
-      content,
-      category: category || 'uncategorized',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
-    };
+  //   const newPost = {
+  //     id: nextId++,
+  //     title,
+  //     content,
+  //     category: category || 'uncategorized',
+  //     createdAt: new Date().toISOString(),
+  //     updatedAt: new Date().toISOString()
+  //   };
 
-    posts.push(newPost);
+  //   posts.push(newPost);
 
-    res.status(201).json({
-      success: true,
-      message: 'Post created successfully',
-      data: newPost
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Server error',
-      error: error.message
-    });
-  }
+  //   res.status(201).json({
+  //     success: true,
+  //     message: 'Post created successfully',
+  //     data: newPost
+  //   });
+  // } catch (error) {
+  //   res.status(500).json({
+  //     success: false,
+  //     message: 'Server error',
+  //     error: error.message
+  //   });
+  // }
 };
 
 const updatePost = (req, res) => {
