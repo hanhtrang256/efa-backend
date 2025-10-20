@@ -19,3 +19,7 @@ Thumbs.db
 # Build output
 dist/
 build/
+node_modules/
+.env
+.DS_Store
+*.log
